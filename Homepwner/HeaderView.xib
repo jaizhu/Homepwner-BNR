@@ -29,7 +29,7 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="addNewItem:" destination="-1" eventType="touchDown" id="fxg-O4-81N"/>
+                        <action selector="addItemButtonPressed:" destination="-1" eventType="touchDown" id="jtH-Bo-Vfe"/>
                     </connections>
                 </button>
             </subviews>

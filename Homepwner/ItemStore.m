@@ -16,6 +16,10 @@
 
 @implementation ItemStore
 
+- (void)insertItem:(Item *)item {
+    [self.items addObject:item];
+}
+
 - (NSArray *)allItems {
     return [_items copy];
 }

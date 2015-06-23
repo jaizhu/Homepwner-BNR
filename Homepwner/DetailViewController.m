@@ -35,13 +35,48 @@
 //    }
 }
 
+/* BLOCKS FOR MODAL VIEWS */
+- (void)cancel:(id)sender {
+    if (self.cancelBlock) {
+        self.cancelBlock();
+    }
+}
+
+- (void)save:(id)sender {
+    if (self.saveBlock) {
+        self.saveBlock(self.item);
+    }
+}
+
 - (instancetype)initWithItem:(Item *)item
                   imageStore:(ImageStore *)images {
     self = [super initWithNibName:@"DetailViewController" bundle:nil];
     if (self) {
         self.item = item;
-        self.navigationItem.title = item.name;
         self.imageStore = images;
+        self.navigationItem.title = item.name;
+        
+        if (item == nil) {
+            // we were not given an item, so make an empty one
+            self.item = [[Item alloc] init];
+            
+            // since this is a new item, provide cancel and done buttons
+            UIBarButtonItem *cancelItem =
+            [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                          target:self
+                                                          action:@selector(cancel:)];
+            self.navigationItem.leftBarButtonItem = cancelItem;
+            
+            UIBarButtonItem *doneItem =
+            [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                          target:self
+                                                          action:@selector(save:)];
+            self.navigationItem.rightBarButtonItem = doneItem;
+        } else {
+            // otherwise, just provide defaults
+            self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
+            self.navigationItem.rightBarButtonItem = nil;
+        }
     }
     return self;
 }

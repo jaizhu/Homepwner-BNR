@@ -13,6 +13,10 @@
 
 @interface DetailViewController : UIViewController
     <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate>
+
+@property (nonatomic, copy) void(^cancelBlock)(void);
+@property (nonatomic, copy) void(^saveBlock)(Item *);
+
 - (instancetype)initWithItem:(Item *)item imageStore:(ImageStore *)images;
 
 @end

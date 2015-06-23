@@ -32,7 +32,7 @@
         UIBarButtonItem *barItem =
         [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                       target:self
-                                                      action:@selector(addNewItem:)];
+                                                      action:@selector(addItemButtonPressed:)];
         
         // set the bar button item to the rightmost button in the nav bar for this VC
         self.navigationItem.rightBarButtonItem = barItem;
@@ -158,18 +158,40 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView reloadData];
 }
 
-/* HEADERS */
-- (IBAction)addNewItem:(id)sender {
-    // create a new item and add it to the store
-    Item *newItem = [self.itemStore createItem];
+/* ADD A NEW ITEM (EXIST IN THE HEADER */
+- (IBAction)addItemButtonPressed:(id)sender {
+    [self presentDetailForNewItem];
+}
+
+- (void)presentDetailForNewItem {
+    DetailViewController *dvc = [[DetailViewController alloc] initWithItem:nil
+                                                                imageStore:self.imageStore];
     
-    // figure out the item's index in the items array
-    NSInteger index = [self.itemStore.allItems indexOfObjectIdenticalTo:newItem];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-                              
-    // insert a row at this indexpath in the table
-    [self.tableView insertRowsAtIndexPaths:@[indexPath]
-                          withRowAnimation:UITableViewRowAnimationTop];
+    // this is where we are putting the blocks
+    dvc.cancelBlock = ^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    };
+    
+    dvc.saveBlock = ^(Item *newItem) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            // insert the item into the store
+            [self.itemStore insertItem:newItem];
+            
+            // insert a cell for the item into the table view
+            NSUInteger index = [self.itemStore.allItems indexOfObjectIdenticalTo:newItem];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [self.tableView insertRowsAtIndexPaths:@[indexPath]
+                                  withRowAnimation:UITableViewRowAnimationTop];
+        }];
+    };
+    
+    UINavigationController *nc =
+    [[UINavigationController alloc] initWithRootViewController:dvc];
+    
+    // make it fancy
+    nc.modalPresentationStyle = UIModalPresentationFormSheet;
+    
+    [self presentViewController:nc animated:YES completion:nil];
 }
 
 //- (IBAction)toggleEditingMode:(id)sender {
