@@ -17,6 +17,7 @@
 @property (nonatomic) ItemStore *itemStore;
 @property (nonatomic) IBOutlet UIView *headerView;
 @property (nonatomic) ImageStore *imageStore;
+@property (nonatomic) NSString *key;
 @end
 
 @implementation ItemsViewController
@@ -26,6 +27,11 @@
     if (self) {
         self.itemStore = store;
         self.imageStore = images;
+        
+        self.navigationItem.title = NSLocalizedString(@"Homepwner", @"Name of the application");
+        
+        
+        
         self.navigationItem.title = @"Homepwner";
         
         // create a new bar button item that will send addNewItem: to this VC
@@ -58,7 +64,12 @@
     Item *item = self.itemStore.allItems[indexPath.row];
     cell.nameLabel.text = item.name;
     cell.serialNumber.text = item.serialNumber;
-    cell.valueLabel.text = [NSString stringWithFormat:@"$%d", item.valueInDollars];
+    
+    // internationalizing the date
+    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
+    currencyFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    
+    cell.valueLabel.text = [currencyFormatter stringFromNumber:@(item.valueInDollars)];
     
     return cell;
 }
@@ -163,6 +174,9 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self presentDetailForNewItem];
 }
 
+////////////////////// CHALLGENGE FIXING INEFFICIENT MEMORY BUG //////////////////////
+
+
 - (void)presentDetailForNewItem {
     DetailViewController *dvc = [[DetailViewController alloc] initWithItem:nil
                                                                 imageStore:self.imageStore];
@@ -193,20 +207,5 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     [self presentViewController:nc animated:YES completion:nil];
 }
-
-//- (IBAction)toggleEditingMode:(id)sender {
-//    // if you are currently in editing mode...
-//    if (self.editing) {
-//        // change the text of the button to inform the user
-//        [sender setTitle:@"Edit" forState:UIControlStateNormal];
-//        // and exit editing mode
-//        [self setEditing:NO animated:YES];
-//    } else {
-//        // change the button
-//        [sender setTitle:@"Done" forState:UIControlStateNormal];
-//        // and enter editing mode
-//        [self setEditing:YES animated:YES];
-//    }
-//}
 
 @end

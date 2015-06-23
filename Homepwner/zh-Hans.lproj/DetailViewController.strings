@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "DT6-Sc-Ta9"; */
+"DT6-Sc-Ta9.text" = "标签";
+
+/* Class = "UILabel"; text = "Value"; ObjectID = "E8X-oE-2bq"; */
+"E8X-oE-2bq.text" = "值";
+
+/* Class = "UILabel"; text = "Serial"; ObjectID = "jFr-52-C1t"; */
+"jFr-52-C1t.text" = "编号";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "kYT-pB-DJR"; */
+"kYT-pB-DJR.text" = "名字";

@@ -29,6 +29,16 @@
     }
 }
 
+/* CREATING A PATH FOR IMAGES TO BE SAVED */
+- (NSString *)imagePathForKey:(NSString *)key {
+    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                               NSUserDomainMask,
+                                                               YES);
+    NSString *documentDirectory = [directories firstObject];
+    NSString *imagePath = [documentDirectory stringByAppendingPathComponent:key];
+    return imagePath;
+}
+
 /* MADE TO READ AND LOAD AN IMAGE FROM THE FILE SYSTEM */
 - (UIImage *)imageForKey:(NSString *)key {
     UIImage *image = self.imageDictionary[key];
@@ -62,16 +72,6 @@
                  object:[UIApplication sharedApplication]];
     }
     return self;
-}
-
-/* CREATING A PATH FOR IMAGES TO BE SAVED */
-- (NSString *)imagePathForKey:(NSString *)key {
-    NSArray *directories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                               NSUserDomainMask,
-                                                               YES);
-    NSString *documentDirectory = [directories firstObject];
-    NSString *imagePath = [documentDirectory stringByAppendingPathComponent:key];
-    return imagePath;
 }
 
 @end
