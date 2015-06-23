@@ -190,7 +190,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // make it fancy
     nc.modalPresentationStyle = UIModalPresentationFormSheet;
-    
+
     [self presentViewController:nc animated:YES completion:nil];
 }
 

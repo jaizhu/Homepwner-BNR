@@ -180,6 +180,8 @@
     ipc.delegate = self;
     
     // present the UIImagePickerController
+    ipc.modalPresentationStyle = UIModalPresentationPopover;
+    ipc.popoverPresentationController.barButtonItem = self.cameraItem;
     [self presentViewController:ipc animated:YES completion:nil];
 }
 
