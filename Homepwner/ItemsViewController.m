@@ -80,14 +80,52 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // find the item to delete and remove it from the ItemStore
         Item *item = self.itemStore.allItems[indexPath.row];
-        [self.itemStore removeItem:item];
         
-        // and remove its image from the image store
-        [self.imageStore setImage:nil forKey:item.itemKey];
+        // user must confirm deletion
+        NSString *title = [NSString stringWithFormat:@"Delete %@?", item.name];
+        NSString *message = @"Are you sure you want to delete this item?";
         
-        // and remove the deleted row from the table
-        [self.tableView deleteRowsAtIndexPaths:@[indexPath]
-                               withRowAnimation:UITableViewRowAnimationFade];
+        UIAlertController *ac =
+        [UIAlertController alertControllerWithTitle:title
+                                            message:message
+                                     preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *cancelAction =
+        [UIAlertAction actionWithTitle:@"Cancel"
+                                 style:UIAlertActionStyleCancel
+                               handler:nil];
+        
+        [ac addAction:cancelAction];
+        
+        UIAlertAction *deleteAction =
+        [UIAlertAction actionWithTitle:@"Delete"
+                                 style:UIAlertActionStyleDestructive
+                               handler:^(UIAlertAction *action) {
+                                   [self.itemStore removeItem:item];
+                                   
+                                   // and remove its image from the image store
+                                   [self.imageStore setImage:nil forKey:item.itemKey];
+                                   
+                                   // and remove the deleted row from the table
+                                   [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                                                         withRowAnimation:UITableViewRowAnimationFade];
+
+                               }];
+        
+        [ac addAction:deleteAction];
+        
+        // use popover whenever possible (regular width environments)
+        ac.modalPresentationStyle = UIModalPresentationPopover;
+        
+        // configure popover properties
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (cell) {
+            ac.popoverPresentationController.sourceView = cell;
+            ac.popoverPresentationController.sourceRect = cell.bounds;
+        }
+        
+        // present the alert controller
+        [self presentViewController:ac animated:YES completion:nil];
     }
 }
 

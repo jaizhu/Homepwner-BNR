@@ -62,6 +62,7 @@
     
     // display the items image, if there is one for it in the image store
     UIImage *itemImage = [self.imageStore imageForKey:self.item.itemKey];
+//    [_imageView setClipsToBounds:YES];
     self.imageView.image = itemImage;
 }
 
@@ -77,6 +78,52 @@
     self.item.serialNumber = self.serialNumberField.text;
     self.item.valueInDollars = [self.valueField.text intValue];
 }
+
+/* OVERRIDING FOR CONSTRAINING ADDITIONAL VIEW TO ADD TO HEIRARCHY */
+/*
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    UIImageView *iv = [UIImageView new];
+    
+    // the contentmode of the image view in the XIB was aspect fit:
+    iv.contentMode = UIViewContentModeScaleAspectFit;
+    
+    // do not produce a translated constraint for this view
+    iv.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    // the image view was a subview of the view
+    [self.view addSubview:iv];
+    
+    // the image view was pointed-to by the imageView property
+    self.imageView = iv;
+    
+    // setting hugging property to be less those that of the text fields
+    [self.imageView setContentHuggingPriority:200
+                                      forAxis:UILayoutConstraintAxisVertical];
+    
+    // creating a dictionary of names for the views
+    NSDictionary *nameMap = @{ @"imageView" : self.imageView,
+                               @"dateLabel" : self.dateLabel,
+                               @"toolbar" : self.toolbar };
+    
+    // create horizontal and vertical image constraints
+    NSArray *horizontalConstraints =
+        [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[imageView]-0-|"
+                                                options:0
+                                                metrics:nil
+                                                  views:nameMap];
+    NSArray *verticalConstraints =
+        [NSLayoutConstraint constraintsWithVisualFormat:@"V:[dateLabel]-[imageView]-[toolbar]"
+                                                options:0
+                                                metrics:nil
+                                                  views:nameMap];
+    
+    // set the constraint properities to YES
+    [NSLayoutConstraint activateConstraints:horizontalConstraints];
+    [NSLayoutConstraint activateConstraints:verticalConstraints];
+}
+*/
 
 - (IBAction)pictureButtonPressed:(UIBarButtonItem *)sender {
     [self takePicture];
@@ -124,13 +171,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     return YES;
 }
 
-/* OVERRIDING CONSTRAINT STUFF */
-//- (void)viewDidLayoutSubviews {
-//    for (UIView *subview in self.view.subviews) {
-//        if ([subview hasAmbiguousLayout]) {
-//            NSLog(@"AMBIGUOUS: %@", subview);
-//        }
-//    }
-//}
+// OVERRIDING CONSTRAINT STUFF 
+- (void)viewDidLayoutSubviews {
+    for (UIView *subview in self.view.subviews) {
+        if ([subview hasAmbiguousLayout]) {
+            NSLog(@"AMBIGUOUS: %@", subview);
+        }
+    }
+}
 
 @end
