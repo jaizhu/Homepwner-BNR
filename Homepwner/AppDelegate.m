@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "ItemsViewController.h"
+#import "ItemStore.h"
+#import "ImageStore.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +20,30 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    
+    // create some itemStore
+    ItemStore *itemStore = [[ItemStore alloc] init];
+    
+    // create some imageSTore
+    ImageStore *imageStore = [[ImageStore alloc] init];
+    
+    // create an itemsViewController
+    ItemsViewController *ivc =
+    [[ItemsViewController alloc] initWithItemStore:itemStore
+                                        ImageStore:imageStore];
+    
+    // create a UINavigationController and set it as the rvc
+    UINavigationController *navController =
+    [[UINavigationController alloc] initWithRootViewController:ivc];
+    
+    // use the NvaigationController as the top=level view controller in the app
+    self.window.rootViewController = navController;
+    
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
